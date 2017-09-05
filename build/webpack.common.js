@@ -1,8 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const webpack = require('webpack');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');// tree shaking 精简输出
+
 module.exports = {
     entry: {
         main: './src/index.js',
@@ -11,26 +10,15 @@ module.exports = {
         ]
     },
     output: {
-        filename: '[name].[hash].js',
-        path: path.resolve(__dirname, 'dist')
-    },
-    devtool: 'inline-source-map',
-    devServer: {
-        contentBase: './dist',
-        hot: true
+        filename: '[name].[contenthash].js',
+        path: path.resolve(__dirname, '../dist')
     },
     plugins: [
-        new CleanWebpackPlugin(['dist']),
+        new CleanWebpackPlugin(['dist'],{
+            root: path.resolve(__dirname, '..')
+        }),
         new HtmlWebpackPlugin({
-            title: 'output management'
-        }),
-        new webpack.HotModuleReplacementPlugin(), // 热更新
-        new UglifyJSPlugin(),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor' // common bundle name
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'runtime'
+            title: 'prod'
         })
     ],
     module: {
@@ -54,4 +42,3 @@ module.exports = {
         ]
     }
 }
-// https://doc.webpack-china.org/guides/author-libraries
